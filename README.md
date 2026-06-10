@@ -1,25 +1,46 @@
 # Elevate
 
-    Elevate is a standalone library for processing and composing procedural fields.
-    The project is intended to provide a reusable foundation for procedural generation systems while remaining independent from specific frameworks.
+Elevate is a standalone backend library for blending two-dimensional scalar fields (heightmaps, influence maps, density, etc.).
+It is designed as a pure data‑processing core for procedural generation systems: terrain, voxel worlds, biomes, simulations, and runtime tools.
+Elevate has no dependencies on Unity Editor, specific noise libraries, Texture2D, file I/O, or any visual output system.
 
 ## Documentation
 
-Main documents:
+The only technical specification for the first version (MVP) is:
 
-    `Architecture.md`
-    `Changelog.md`
-    `Roadmap.md`
+**[Roadmap.md](Roadmap.md)**
 
-## Repository Structure
+It contains:
+- Public API requirements
+- Data model (`ScalarMap`, `Layer`)
+- Blend modes (`Add`, `Blend`, `Max`, `Min`)
+- Composition rules and validation
+- Performance constraints
+- Tests and benchmarks
 
-    `Runtime/` — Code executed at runtime.
-    `Editor/` — Editor-only integrations and tools.
-    `Tests/` — Automated tests.
-    `Samples~/` — Usage examples.
-    `Documentation~/` — Project documentation.
+## Repository Structure (MVP)
 
-## Development
+Only these folders are required for the first version:
 
-    Elevate is being developed as an independent library and should remain decoupled from external projects whenever possible.
-    Project-specific integrations should be implemented in separate modules.
+    Runtime/
+    ScalarMap.cs
+    Layer.cs
+    BlendMode.cs
+    ComposeSettings.cs
+    Composer.cs
+    Tests/
+    Benchmarks/
+
+## Development Rules (short)
+
+All requirements are defined in `Roadmap.md`.  
+When in doubt, follow the specification in `Roadmap.md`.
+
+Prohibited in MVP:
+- LINQ, reflection, delegates in the per‑pixel loop
+- Temporary `ScalarMap` allocations per layer
+- Hidden normalization or clamping
+- Modifying input maps
+
+## License
+NightLum Studios License (NSL) v1.2
