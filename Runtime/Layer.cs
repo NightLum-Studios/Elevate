@@ -10,6 +10,6 @@ namespace NightLum.Elevate.Core
         public float Weight { get; set; } = 1f;
         public bool Enabled { get; set; } = true;
         public int Priority { get; set; }
-        public BlendMode Mode { get; set; }
+        public BlendMode Mode { get; set; } = BlendMode.Blend;
     }
 }

@@ -11,9 +11,12 @@ namespace NightLum.Elevate.Core
             float layer,
             float rawStrength)
         {
+            if (float.IsNaN(rawStrength) || float.IsInfinity(rawStrength))
+                throw new ArgumentException("Strength must be a finite number.", nameof(rawStrength));
+
             if (rawStrength <= 0f) return current;
 
-            float strength = Math.Clamp(rawStrength, 0f, 1f);
+            float strength = Clamp01(rawStrength);
 
             switch (mode)
             {
@@ -43,6 +46,12 @@ namespace NightLum.Elevate.Core
                 default:
                     throw new ArgumentOutOfRangeException(nameof(mode));
             }
+        }
+
+        private static float Clamp01(float value)
+        {
+            if (value < 0f) return 0f;
+            return value > 1f ? 1f : value;
         }
     }
 }

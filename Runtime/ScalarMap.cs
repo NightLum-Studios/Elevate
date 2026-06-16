@@ -12,22 +12,22 @@ namespace NightLum.Elevate.Core
 
         public ScalarMap(int width, int height)
         {
-            ValidateDimensions(width, height);
+            int length = ValidateDimensions(width, height);
 
             Width = width;
             Height = height;
 
-            _data = new float[width * height];
+            _data = new float[length];
         }
 
         public ScalarMap(int width, int height, float[] data)
         {
-            ValidateDimensions(width, height);
+            int expectedLength = ValidateDimensions(width, height);
 
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
-            if (data.Length != width * height)
+            if (data.Length != expectedLength)
                 throw new ArgumentException(
                     "Data length must equal width * height.",
                     nameof(data));
@@ -99,7 +99,7 @@ namespace NightLum.Elevate.Core
             return y * Width + x;
         }
 
-        private static void ValidateDimensions(int width, int height)
+        private static int ValidateDimensions(int width, int height)
         {
             if (width <= 0)
                 throw new ArgumentException("Width must be greater than zero.",
@@ -109,10 +109,7 @@ namespace NightLum.Elevate.Core
                 throw new ArgumentException("Height must be greater than zero.",
                     nameof(height));
 
-            checked
-            {
-                _ = width * height;
-            }
+            return checked(width * height);
         }
     }
 }
