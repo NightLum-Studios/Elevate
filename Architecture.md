@@ -20,9 +20,9 @@
 
 ---
 
-### HeightMap
+### ScalarMap
 
-    A scalar field containing elevation or terrain height data.
+    A source-agnostic two-dimensional scalar field.
 
 ### Layer
 
@@ -54,3 +54,17 @@ Example modes:
     Extensible architecture.
     Minimal external dependencies.
     Support for processing large datasets.
+
+## Source Adapter Boundary
+
+Elevate runtime code accepts only scalar data and composition settings. It does not reference UnityEngine, UnityEditor, textures, files, graph frameworks, or noise generators.
+
+Adapters are separate assemblies or folders that translate external data into `ScalarMap`. They may depend on their source system while referencing `Elevate.Runtime`; the runtime assembly never references adapters.
+
+Dependency direction:
+
+    Terrain Graph adapter -> Elevate.Runtime
+    Texture adapter       -> Elevate.Runtime
+    Elevate.Runtime       -> System only
+
+An adapter can populate a map through `Set`, `AsSpan`, or `GetRawData`, then pass it to `Composer.Compose`. Adding a source requires no changes to the Elevate core.

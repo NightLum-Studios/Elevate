@@ -1,0 +1,17 @@
+{
+  "name": "com.nightlum.elevate",
+  "version": "1.0.0",
+  "displayName": "Elevate",
+  "description": "A Unity-independent runtime library for deterministic composition of two-dimensional scalar fields.",
+  "unity": "2021.3",
+  "keywords": [
+    "scalar-field",
+    "heightmap",
+    "procedural-generation",
+    "terrain"
+  ],
+  "author": {
+    "name": "NightLum Studios"
+  },
+  "license": "SEE LICENSE IN LICENSE.md"
+}

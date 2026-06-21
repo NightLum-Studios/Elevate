@@ -1,46 +1,74 @@
 # Elevate
 
-Elevate is a standalone backend library for blending two-dimensional scalar fields (heightmaps, influence maps, density, etc.).
-It is designed as a pure data‑processing core for procedural generation systems: terrain, voxel worlds, biomes, simulations, and runtime tools.
-Elevate has no dependencies on Unity Editor, specific noise libraries, Texture2D, file I/O, or any visual output system.
+Elevate is a standalone .NET/Unity runtime library for blending two-dimensional scalar fields such as heightmaps, influence maps, and density maps.
 
-## Documentation
+It is a pure data-processing core. The runtime assembly has no dependencies on UnityEngine, UnityEditor, Texture2D, file I/O, graph frameworks, or noise libraries.
 
-The only technical specification for the first version (MVP) is:
+## Installation
 
-**[Roadmap.md](Roadmap.md)**
+The Elevate folder is a valid Unity Package Manager package. Add it as a local package, a Git dependency, or copy it into a project's `Packages` directory.
 
-It contains:
-- Public API requirements
-- Data model (`ScalarMap`, `Layer`)
-- Blend modes (`Add`, `Blend`, `Max`, `Min`)
-- Composition rules and validation
-- Performance constraints
-- Tests and benchmarks
+Projects that embed Elevate under `Assets` can reference the `Elevate.Runtime` assembly definition directly. Non-Unity .NET projects can compile the C# files under `Runtime`.
 
-## Repository Structure (MVP)
+## Quick Start
 
-Only these folders are required for the first version:
+```csharp
+using NightLum.Elevate.Composition;
+using NightLum.Elevate.Core;
 
-    Runtime/
-    ScalarMap.cs
-    Layer.cs
-    BlendMode.cs
-    ComposeSettings.cs
-    Composer.cs
-    Tests/
-    Benchmarks/
+var baseMap = new ScalarMap(1024, 1024);
+var source = new ScalarMap(1024, 1024);
+var layer = new Layer
+{
+    Source = source,
+    Mode = BlendMode.Add,
+    Weight = 0.3f
+};
+var settings = new ComposeSettings
+{
+    ClampOutput = true,
+    MaxValue = 100f
+};
 
-## Development Rules (short)
+ScalarMap result = Composer.Compose(baseMap, new[] { layer }, settings);
+```
 
-All requirements are defined in `Roadmap.md`.  
-When in doubt, follow the specification in `Roadmap.md`.
+## Source Adapters
 
-Prohibited in MVP:
-- LINQ, reflection, delegates in the per‑pixel loop
-- Temporary `ScalarMap` allocations per layer
-- Hidden normalization or clamping
-- Modifying input maps
+Source adapters belong outside the runtime core. An adapter only needs to create and populate a `ScalarMap`; adding support for Terrain Graph, textures, noise, or files requires no changes to Elevate.
+
+```csharp
+// This type belongs in an external integration assembly.
+public static class ExampleSourceAdapter
+{
+    public static ScalarMap Convert(float[,] source)
+    {
+        int width = source.GetLength(0);
+        int height = source.GetLength(1);
+        var result = new ScalarMap(width, height);
+
+        for (int y = 0; y < height; y++)
+        for (int x = 0; x < width; x++)
+            result.Set(x, y, source[x, y]);
+
+        return result;
+    }
+}
+```
+
+## Public API
+
+The MVP surface consists of `ScalarMap`, `Layer`, `BlendMode`, `ComposeSettings`, `Composer`, and the `BlendModes` formula helper. All public members include XML documentation.
+
+The full MVP specification is in [Roadmap.md](Roadmap.md).
+
+## Development Rules
+
+- No LINQ, reflection, delegates, or per-pixel allocation in composition hot paths.
+- No temporary `ScalarMap` allocation per layer.
+- No hidden normalization.
+- Input maps are never modified.
 
 ## License
+
 NightLum Studios License (NSL) v1.2

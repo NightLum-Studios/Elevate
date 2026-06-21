@@ -3,8 +3,15 @@ using NightLum.Elevate.Composition;
 
 namespace NightLum.Elevate.Core
 {
+    /// <summary>Provides the scalar formulas used by the built-in blend modes.</summary>
     public static class BlendModes
     {
+        /// <summary>Applies one blend operation to a pair of scalar values.</summary>
+        /// <param name="mode">The blend operation.</param>
+        /// <param name="current">The accumulated value.</param>
+        /// <param name="layer">The source-layer value.</param>
+        /// <param name="rawStrength">Strength clamped to the range zero through one.</param>
+        /// <returns>The blended value.</returns>
         public static float Apply(
             BlendMode mode,
             float current,

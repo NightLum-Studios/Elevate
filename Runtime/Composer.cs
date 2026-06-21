@@ -4,8 +4,14 @@ using NightLum.Elevate.Composition;
 
 namespace NightLum.Elevate.Core
 {
+    /// <summary>Composes a base scalar map with an ordered collection of layers.</summary>
     public static class Composer
     {
+        /// <summary>Creates a new map by applying enabled layers to a copy of the base map.</summary>
+        /// <param name="baseMap">The required base map. It is never modified.</param>
+        /// <param name="layers">The layers to validate, sort, and apply.</param>
+        /// <param name="settings">The required output settings.</param>
+        /// <returns>A newly allocated map containing the composition result.</returns>
         public static ScalarMap Compose(
             ScalarMap baseMap,
             IReadOnlyList<Layer> layers,
